@@ -176,7 +176,7 @@ MIT License
 ## 联系方式
 
 如有问题或建议，请通过以下方式联系：
-- Email: [your-email@example.com]
+- Email: [zzz1110002023@163.com]
 - GitHub Issues: [repository-url]/issues
 
 ---
