@@ -1,0 +1,248 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="page-title">
+        <h1>历史记录</h1>
+        <p>查看和管理您的解卦记录</p>
+    </div>
+
+    <!-- 搜索和筛选 -->
+    <div class="card">
+        <h2 class="card-title">
+            <i class="fas fa-search"></i>
+            搜索和筛选
+        </h2>
+        <div class="search-bar">
+            <input 
+                type="text" 
+                id="searchInput" 
+                class="search-input" 
+                placeholder="搜索问题或模型..."
+            >
+            <button class="search-btn" onclick="searchHistory()">
+                <i class="fas fa-search"></i>
+                搜索
+            </button>
+            <button class="clear-btn" onclick="clearSearch()">
+                <i class="fas fa-times"></i>
+                清空
+            </button>
+        </div>
+    </div>
+
+    <!-- 历史记录列表 -->
+    <div class="history-section">
+        <h2 class="section-title">
+            <i class="fas fa-history"></i>
+            解卦记录
+            <span class="record-count">({{ records|length }}条)</span>
+        </h2>
+        
+        {% if records %}
+            <div class="history-list" id="historyList">
+                {% for record in records %}
+                    <div class="history-item card" data-record-id="{{ record.id }}">
+                        <div class="history-header">
+                            <div class="history-info">
+                                <div class="history-time">{{ record.timestamp }}</div>
+                                <div class="history-model">{{ record.model }}</div>
+                            </div>
+                            <div class="history-actions">
+                                <button class="action-btn view-btn" onclick="viewRecord('{{ record.id }}')" title="查看详情">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="action-btn delete-btn" onclick="deleteRecord('{{ record.id }}')" title="删除记录">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="history-content">
+                            <div class="history-question">{{ record.question }}</div>
+                            <div class="history-yongshen">
+                                <span class="label">用神：</span>
+                                <span class="value">{{ record.yongshen.text }}</span>
+                            </div>
+                        </div>
+                        <div class="history-footer">
+                            <div class="yongshen-strength">
+                                <span class="label">用神指数：</span>
+                                <span class="value {{ 'positive' if record.shuzi_lianghua.用神指数.总指数 > 0 else 'negative' }}">
+                                    {{ record.shuzi_lianghua.用神指数.总指数 }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-records">
+                <i class="fas fa-inbox"></i>
+                <p>暂无历史记录</p>
+                <a href="/" class="btn btn-primary">
+                    <i class="fas fa-plus"></i>
+                    开始第一次解卦
+                </a>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- 批量操作 -->
+    {% if records %}
+        <div class="batch-actions">
+            <button class="btn btn-secondary" onclick="exportAllRecords()">
+                <i class="fas fa-download"></i>
+                导出全部记录
+            </button>
+            <button class="btn btn-danger" onclick="clearAllRecords()">
+                <i class="fas fa-trash"></i>
+                清空记录
+            </button>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        // 搜索历史记录
+        function searchHistory() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const historyItems = document.querySelectorAll('.history-item');
+            
+            historyItems.forEach(item => {
+                const question = item.querySelector('.history-question').textContent.toLowerCase();
+                const model = item.querySelector('.history-model').textContent.toLowerCase();
+                
+                if (question.includes(searchTerm) || model.includes(searchTerm)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+        
+        // 清空搜索
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            const historyItems = document.querySelectorAll('.history-item');
+            historyItems.forEach(item => {
+                item.style.display = 'block';
+            });
+        }
+        
+        // 查看记录详情
+        function viewRecord(recordId) {
+            window.location.href = `/result/${recordId}`;
+        }
+        
+        // 删除记录
+        async function deleteRecord(recordId) {
+            if (confirm('确定要删除这条记录吗？')) {
+                try {
+                    const response = await fetch(`/api/history/${recordId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    const result = await response.json();
+                    if (result.success) {
+                        // 移除DOM元素
+                        const recordElement = document.querySelector(`[data-record-id="${recordId}"]`);
+                        if (recordElement) {
+                            recordElement.remove();
+                            // 更新记录计数
+                            updateRecordCount();
+                        }
+                    } else {
+                        alert('删除失败: ' + result.error);
+                    }
+                } catch (error) {
+                    console.error('删除出错:', error);
+                    alert('删除失败: ' + error.message);
+                }
+            }
+        }
+        
+        // 更新记录计数
+        function updateRecordCount() {
+            const recordCount = document.querySelectorAll('.history-item').length;
+            const countElement = document.querySelector('.record-count');
+            if (countElement) {
+                countElement.textContent = `(${recordCount}条)`;
+            }
+        }
+        
+        // 导出全部记录
+        function exportAllRecords() {
+            const records = JSON.parse('{{ records | tojson | safe }}');
+            let exportText = `AI六爻解卦历史记录\n`;
+            exportText += `总记录数：${records.length}条\n`;
+            exportText += `导出时间：${new Date().toLocaleString()}\n`;
+            exportText += `\n========================================\n\n`;
+            
+            records.forEach((record, index) => {
+                exportText += `记录 ${index + 1}\n`;
+                exportText += `时间：${record.timestamp}\n`;
+                exportText += `模型：${record.model}\n`;
+                exportText += `问题：${record.question}\n`;
+                exportText += `用神：${record.yongshen.text}\n`;
+                exportText += `用神指数：${record.shuzi_lianghua.用神指数.总指数}\n`;
+                exportText += `\n========================================\n\n`;
+            });
+            
+            // 创建下载链接
+            const blob = new Blob([exportText], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `六爻解卦历史记录_${new Date().toISOString().slice(0, 10)}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        
+        // 清空所有记录
+        async function clearAllRecords() {
+            // 先获取用户确认，确保对话框正常工作
+            const confirmed = confirm('确定要清空所有历史记录吗？此操作不可恢复！');
+            
+            // 只有用户确认后才执行删除操作
+            if (confirmed) {
+                try {
+                    const records = document.querySelectorAll('.history-item');
+                    let deletedCount = 0;
+                    
+                    for (let record of records) {
+                        const recordId = record.dataset.recordId;
+                        const response = await fetch(`/api/history/${recordId}`, {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        });
+                        
+                        const result = await response.json();
+                        if (result.success) {
+                            record.remove();
+                            deletedCount++;
+                        }
+                    }
+                    
+                    updateRecordCount();
+                    alert(`成功删除${deletedCount}条记录`);
+                } catch (error) {
+                    console.error('清空记录出错:', error);
+                    alert('清空记录失败: ' + error.message);
+                }
+            }
+        }
+        
+        // 搜索框事件监听
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input', searchHistory);
+        });
+    </script>
+{% endblock %}

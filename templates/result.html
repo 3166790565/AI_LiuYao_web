@@ -1,0 +1,644 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="page-title">
+        <h1>解卦结果</h1>
+        <p>{{ record.timestamp }}</p>
+    </div>
+
+    <!-- 基本信息 -->
+    <div class="card">
+        <h2 class="card-title">
+            <i class="fas fa-info-circle"></i>
+            基本信息
+        </h2>
+        <div class="info-grid">
+            <div class="info-item">
+                <span class="info-label">问题：</span>
+                <span class="info-value">{{ record.question }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">使用模型：</span>
+                <span class="info-value">{{ record.model }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">记录ID：</span>
+                <span class="info-value">{{ record.id }}</span>
+            </div>
+        </div>
+        <div class="hexagram-info">
+            <h3 class="hexagram-info-title">卦象信息</h3>
+            <pre class="hexagram-info-content">{{ record.hexagram_info }}</pre>
+        </div>
+    </div>
+
+    <!-- 结果导航 -->
+    <div class="result-tabs">
+        <button class="tab-btn active" data-tab="yongshen">
+            <i class="fas fa-crosshairs"></i>
+            用神判断
+        </button>
+        <button class="tab-btn" data-tab="yongshen-guli">
+            <i class="fas fa-book"></i>
+            用神卦理
+        </button>
+        <button class="tab-btn" data-tab="dongyao-guli">
+            <i class="fas fa-wave-square"></i>
+            动爻卦理
+        </button>
+        <button class="tab-btn" data-tab="shuzi-lianghua">
+            <i class="fas fa-chart-line"></i>
+            数字量化
+        </button>
+        <button class="tab-btn" data-tab="zonghe-jiedu">
+            <i class="fas fa-lightbulb"></i>
+            综合解读
+        </button>
+        <button class="tab-btn" data-tab="chat-consult">
+            <i class="fas fa-comments"></i>
+            聊天咨询
+        </button>
+    </div>
+
+    <!-- 用神判断结果 -->
+    <div class="tab-content active" id="yongshen">
+        <div class="card">
+            <h3 class="card-title">
+                <i class="fas fa-crosshairs"></i>
+                用神判断
+            </h3>
+            <div class="yongshen-result">
+                <div class="yongshen-main">
+                    <div class="yongshen-item">
+                        <span class="yongshen-label">用神：</span>
+                        <span class="yongshen-value">{{ record.yongshen.text }}</span>
+                    </div>
+                    <div class="yongshen-description">
+                        <h4>判断依据：</h4>
+                        <p>{{ record.yongshen.yiju }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 用神卦理分析 -->
+    <div class="tab-content" id="yongshen-guli">
+        <div class="card">
+            <h3 class="card-title">
+                <i class="fas fa-book"></i>
+                用神卦理分析
+            </h3>
+            <div class="guli-grid">
+                <div class="guli-item">
+                    <h4>与月建关系</h4>
+                    <p>{{ record.yongshen_guli.月建关系 }}</p>
+                </div>
+                <div class="guli-item">
+                    <h4>与日辰关系</h4>
+                    <p>{{ record.yongshen_guli.日辰关系 }}</p>
+                </div>
+                <div class="guli-item">
+                    <h4>与动爻关系</h4>
+                    <p>{{ record.yongshen_guli.动爻关系 }}</p>
+                </div>
+                <div class="guli-item">
+                    <h4>特殊状态</h4>
+                    <p>{{ record.yongshen_guli.特殊状态 }}</p>
+                </div>
+                <div class="guli-item">
+                    <h4>回头生克</h4>
+                    <p>{{ record.yongshen_guli.回头生克 }}</p>
+                </div>
+                <div class="guli-item">
+                    <h4>原神忌神</h4>
+                    <p>{{ record.yongshen_guli.原神忌神 }}</p>
+                </div>
+                <div class="guli-item full-width">
+                    <h4>旺衰评估</h4>
+                    <div class="assessment-badge {{ 'strong' if '旺' in record.yongshen_guli.旺衰评估 else 'weak' if '衰' in record.yongshen_guli.旺衰评估 else '' }}">
+                        {{ record.yongshen_guli.旺衰评估 }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 动爻卦理分析 -->
+    <div class="tab-content" id="dongyao-guli">
+        <div class="card">
+            <h3 class="card-title">
+                <i class="fas fa-wave-square"></i>
+                动爻卦理分析
+            </h3>
+            {% if record.dongyao_guli.有动爻 %}
+                <div class="dongyao-list">
+                    {% for dongyao in record.dongyao_guli.动爻列表 %}
+                        <div class="dongyao-item card">
+                            <h4>动爻：{{ dongyao.爻位 }}</h4>
+                            <div class="guli-grid">
+                                <div class="guli-item">
+                                    <h5>与月建关系</h5>
+                                    <p>{{ dongyao.月建关系 }}</p>
+                                </div>
+                                <div class="guli-item">
+                                    <h5>与日辰关系</h5>
+                                    <p>{{ dongyao.日辰关系 }}</p>
+                                </div>
+                                <div class="guli-item">
+                                    <h5>与其他动爻关系</h5>
+                                    <p>{{ dongyao.动爻关系 }}</p>
+                                </div>
+                                <div class="guli-item">
+                                    <h5>特殊状态</h5>
+                                    <p>{{ dongyao.特殊状态 }}</p>
+                                </div>
+                                <div class="guli-item">
+                                    <h5>回头生克</h5>
+                                    <p>{{ dongyao.回头生克 }}</p>
+                                </div>
+                                <div class="guli-item">
+                                    <h5>变爻关系</h5>
+                                    <p>{{ dongyao.变爻关系 }}</p>
+                                </div>
+                                <div class="guli-item full-width">
+                                    <h5>旺衰评估</h5>
+                                    <div class="assessment-badge {{ 'strong' if '旺' in dongyao.旺衰评估 else 'weak' if '衰' in dongyao.旺衰评估 else '' }}">
+                                        {{ dongyao.旺衰评估 }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="no-dongyao">
+                    <i class="fas fa-info-circle"></i>
+                    <p>本卦中无动爻</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- 数字量化分析 -->
+    <div class="tab-content" id="shuzi-lianghua">
+        <div class="card">
+            <h3 class="card-title">
+                <i class="fas fa-chart-line"></i>
+                数字量化分析
+            </h3>
+            
+            <!-- 基础信息 -->
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">月建：</span>
+                    <span class="info-value">{{ record.shuzi_lianghua.月建 }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">日辰：</span>
+                    <span class="info-value">{{ record.shuzi_lianghua.日辰 }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">用神地支：</span>
+                    <span class="info-value">{{ record.shuzi_lianghua.用神 }}</span>
+                </div>
+            </div>
+
+            <!-- 用神指数 -->
+            <div class="strength-section">
+                <h4>用神强弱指数</h4>
+                <div class="strength-grid">
+                    <div class="strength-item">
+                        <span class="strength-label">月建数：</span>
+                        <span class="strength-value">{{ record.shuzi_lianghua.用神指数.月建数 }}</span>
+                    </div>
+                    <div class="strength-item">
+                        <span class="strength-label">日辰数：</span>
+                        <span class="strength-value">{{ record.shuzi_lianghua.用神指数.日辰数 }}</span>
+                    </div>
+                    <div class="strength-item full-width">
+                        <span class="strength-label">总指数：</span>
+                        <span class="strength-value total {{ 'positive' if record.shuzi_lianghua.用神指数.总指数 > 0 else 'negative' }}">
+                            {{ record.shuzi_lianghua.用神指数.总指数 }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 动爻指数 -->
+            {% if record.shuzi_lianghua.动爻列表 %}
+                <div class="strength-section">
+                    <h4>动爻强弱指数</h4>
+                    <div class="dongyao-strength-list">
+                        {% for dongyao in record.shuzi_lianghua.动爻指数 %}
+                            <div class="dongyao-strength-item">
+                                <div class="dongyao-dizhi">{{ dongyao.地支 }}</div>
+                                <div class="strength-details">
+                                    <span>月建数：{{ dongyao.月建数 }}</span>
+                                    <span>日辰数：{{ dongyao.日辰数 }}</span>
+                                    <span class="total {{ 'positive' if dongyao.总指数 > 0 else 'negative' }}">
+                                        总指数：{{ dongyao.总指数 }}
+                                    </span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% else %}
+                <div class="no-dongyao">
+                    <p>本卦中无动爻</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- 综合解读 -->
+    <div class="tab-content" id="zonghe-jiedu">
+        <div class="card">
+            <h3 class="card-title">
+                <i class="fas fa-lightbulb"></i>
+                综合解读
+            </h3>
+            <div class="jiedu-content">
+                <p>{{ record.zonghe_jiedu }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 聊天咨询 -->
+    <div class="tab-content" id="chat-consult">
+        <div class="chat-container">
+            <!-- 聊天设置 -->
+            <div class="chat-settings card">
+                <h3 class="card-title">
+                    <i class="fas fa-cog"></i>
+                    聊天设置
+                </h3>
+                <div class="setting-item">
+                    <label for="chatModel" class="setting-label">
+                        <i class="fas fa-brain"></i>
+                        AI模型
+                    </label>
+                    <select id="chatModel" class="setting-select">
+                        {% for model in models %}
+                            <option value="{{ model }}">{{ model }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="setting-actions">
+                    <button class="btn btn-secondary" onclick="clearChat()">
+                        <i class="fas fa-trash"></i>
+                        清空聊天
+                    </button>
+                    <button class="btn btn-secondary" onclick="scrollToBottom()">
+                        <i class="fas fa-arrow-down"></i>
+                        滚动到底部
+                    </button>
+                </div>
+            </div>
+
+            <!-- 聊天区域 -->
+            <div class="chat-main">
+                <!-- 聊天消息列表 -->
+                <div class="chat-messages" id="chatMessages">
+                    <!-- 欢迎消息 -->
+                    <div class="message message-ai">
+                        <div class="message-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="message-content">
+                            <div class="message-header">
+                                <span class="message-author">AI六爻大师</span>
+                                <span class="message-time"></span>
+                            </div>
+                            <div class="message-text">
+                                <p>您好！我是AI六爻大师，很高兴为您提供进一步的咨询服务。</p>
+                                <p>我已经了解了您的解卦结果，您可以针对此结果提出任何问题，我会为您详细解答。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 消息输入区域 -->
+                <div class="chat-input-area">
+                    <div class="input-wrapper">
+                        <textarea 
+                            id="messageInput" 
+                            class="message-input" 
+                            rows="1" 
+                            placeholder="请输入您的问题..."
+                            onkeydown="handleKeyDown(event)"
+                        ></textarea>
+                    </div>
+                    <div class="input-actions">
+                        <button class="btn btn-primary send-btn" onclick="sendMessage()">
+                            <i class="fas fa-paper-plane"></i>
+                            发送
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 操作按钮 -->
+    <div class="result-actions">
+        <a href="/" class="btn btn-primary">
+            <i class="fas fa-redo"></i>
+            重新解卦
+        </a>
+        <a href="/history" class="btn btn-secondary">
+            <i class="fas fa-history"></i>
+            查看历史
+        </a>
+        <button class="btn btn-secondary" onclick="exportResult()">
+            <i class="fas fa-download"></i>
+            导出结果
+        </button>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        // 标签页切换功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const targetTab = this.getAttribute('data-tab');
+                    
+                    // 移除所有激活状态
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    
+                    // 添加当前激活状态
+                    this.classList.add('active');
+                    document.getElementById(targetTab).classList.add('active');
+                });
+            });
+            
+            // 初始化聊天欢迎消息时间
+            const welcomeTime = document.querySelector('#chatMessages .message-time');
+            if (welcomeTime) {
+                welcomeTime.textContent = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+            }
+        });
+        
+        // 导出结果功能
+        function exportResult() {
+            const record = {{ record | tojson }};
+            const resultText = `AI六爻解卦结果\n` +
+                `====================\n` +
+                `时间：${record.timestamp}\n` +
+                `问题：${record.question}\n` +
+                `模型：${record.model}\n` +
+                `\n====================\n` +
+                `【用神判断】\n` +
+                `用神：${record.yongshen.text}\n` +
+                `判断依据：${record.yongshen.yiju}\n` +
+                `\n====================\n` +
+                `【用神卦理分析】\n` +
+                `与月建关系：${record.yongshen_guli.月建关系}\n` +
+                `与日辰关系：${record.yongshen_guli.日辰关系}\n` +
+                `与动爻关系：${record.yongshen_guli.动爻关系}\n` +
+                `特殊状态：${record.yongshen_guli.特殊状态}\n` +
+                `回头生克：${record.yongshen_guli.回头生克}\n` +
+                `原神忌神：${record.yongshen_guli.原神忌神}\n` +
+                `旺衰评估：${record.yongshen_guli.旺衰评估}\n` +
+                `\n====================\n` +
+                `【动爻卦理分析】\n` +
+                `有动爻：${record.dongyao_guli.有动爻}\n` +
+                `${record.dongyao_guli.动爻列表.map(dy => 
+                    `\n${dy.爻位}：\n` +
+                    `  与月建关系：${dy.月建关系}\n` +
+                    `  与日辰关系：${dy.日辰关系}\n` +
+                    `  与其他动爻关系：${dy.动爻关系}\n` +
+                    `  特殊状态：${dy.特殊状态}\n` +
+                    `  回头生克：${dy.回头生克}\n` +
+                    `  变爻关系：${dy.变爻关系}\n` +
+                    `  旺衰评估：${dy.旺衰评估}`
+                ).join('')}\n` +
+                `\n====================\n` +
+                `【数字量化分析】\n` +
+                `月建：${record.shuzi_lianghua.月建}\n` +
+                `日辰：${record.shuzi_lianghua.日辰}\n` +
+                `用神地支：${record.shuzi_lianghua.用神}\n` +
+                `用神指数：月建数 ${record.shuzi_lianghua.用神指数.月建数}，日辰数 ${record.shuzi_lianghua.用神指数.日辰数}，总指数 ${record.shuzi_lianghua.用神指数.总指数}\n` +
+                `${record.shuzi_lianghua.动爻指数.map(dy => 
+                    `\n动爻 ${dy.地支}：月建数 ${dy.月建数}，日辰数 ${dy.日辰数}，总指数 ${dy.总指数}`
+                ).join('')}\n` +
+                `\n====================\n` +
+                `【综合解读】\n` +
+                `${record.zonghe_jiedu}`;
+            
+            // 创建下载链接
+            const blob = new Blob([resultText], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `六爻解卦结果_${record.timestamp.replace(/[:\s]/g, '-')}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        
+        // 聊天功能相关变量
+        let messages = [];
+        const record = {{ record | tojson }};
+        
+        // 发送消息
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const messageText = input.value.trim();
+            
+            if (!messageText) return;
+            
+            const model = document.getElementById('chatModel').value;
+            
+            // 添加用户消息到聊天记录
+            addMessage('user', messageText);
+            input.value = '';
+            input.style.height = 'auto'; // 重置输入框高度
+            
+            // 滚动到底部
+            scrollToBottom();
+            
+            // 添加AI正在输入的消息
+            const aiTypingMessage = addMessage('ai-typing', '');
+            
+            try {
+                // 构建系统提示，包含完整解卦记录
+                const systemPrompt = {
+                    role: 'system',
+                    content: `你是一名资深的六爻解卦大师，现在需要基于以下解卦记录为用户提供进一步的咨询服务：\n\n` +
+                        `解卦记录：${JSON.stringify(record, null, 2)}`
+                };
+                
+                // 调用API发送消息
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        messages: [
+                            systemPrompt,
+                            ...messages,
+                            { role: 'user', content: messageText }
+                        ],
+                        model: model
+                    })
+                });
+                
+                const result = await response.json();
+                
+                // 移除正在输入的消息
+                aiTypingMessage.remove();
+                
+                if (result.success) {
+                    // 添加AI回复
+                    addMessage('ai', result.response);
+                } else {
+                    addMessage('ai', `抱歉，出现错误：${result.error}`);
+                }
+            } catch (error) {
+                // 移除正在输入的消息
+                aiTypingMessage.remove();
+                addMessage('ai', `抱歉，网络错误：${error.message}`);
+            } finally {
+                // 滚动到底部
+                scrollToBottom();
+            }
+        }
+        
+        // 添加消息到聊天记录
+        function addMessage(type, text) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            
+            let messageHTML = '';
+            const time = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+            
+            if (type === 'user') {
+                messageDiv.className = 'message message-user';
+                messageHTML = `
+                    <div class="message-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-header">
+                            <span class="message-author">我</span>
+                            <span class="message-time">${time}</span>
+                        </div>
+                        <div class="message-text">${text}</div>
+                    </div>
+                `;
+                
+                // 保存消息到数组
+                messages.push({ role: 'user', content: text });
+            } else if (type === 'ai') {
+                messageDiv.className = 'message message-ai';
+                messageHTML = `
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-header">
+                            <span class="message-author">AI六爻大师</span>
+                            <span class="message-time">${time}</span>
+                        </div>
+                        <div class="message-text">${text}</div>
+                    </div>
+                `;
+                
+                // 保存消息到数组
+                messages.push({ role: 'assistant', content: text });
+            } else if (type === 'ai-typing') {
+                messageDiv.className = 'message message-ai message-typing';
+                messageHTML = `
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-header">
+                            <span class="message-author">AI六爻大师</span>
+                            <span class="message-time">${time}</span>
+                        </div>
+                        <div class="message-typing-indicator">
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            messageDiv.innerHTML = messageHTML;
+            chatMessages.appendChild(messageDiv);
+            
+            return messageDiv;
+        }
+        
+        // 处理回车键发送消息
+        function handleKeyDown(event) {
+            // Ctrl+Enter 或 Shift+Enter 换行
+            if ((event.ctrlKey || event.shiftKey) && event.key === 'Enter') {
+                return; // 允许换行
+            }
+            // Enter 键发送消息
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+        
+        // 自动调整输入框高度
+        document.addEventListener('DOMContentLoaded', function() {
+            const input = document.getElementById('messageInput');
+            input.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+            });
+        });
+        
+        // 滚动到底部
+        function scrollToBottom() {
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // 清空聊天
+        function clearChat() {
+            if (confirm('确定要清空聊天记录吗？')) {
+                const chatMessages = document.getElementById('chatMessages');
+                chatMessages.innerHTML = '';
+                messages = [];
+                
+                // 添加欢迎消息
+                const welcomeDiv = document.createElement('div');
+                welcomeDiv.className = 'message message-ai';
+                welcomeDiv.innerHTML = `
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-header">
+                            <span class="message-author">AI六爻大师</span>
+                            <span class="message-time">${new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })}</span>
+                        </div>
+                        <div class="message-text">
+                            <p>您好！我是AI六爻大师，很高兴为您提供进一步的咨询服务。</p>
+                            <p>我已经了解了您的解卦结果，您可以针对此结果提出任何问题，我会为您详细解答。</p>
+                        </div>
+                    </div>
+                `;
+                chatMessages.appendChild(welcomeDiv);
+                
+                scrollToBottom();
+            }
+        }
+    </script>
+{% endblock %}

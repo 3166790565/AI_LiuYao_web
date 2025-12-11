@@ -1,0 +1,10 @@
+[
+  {
+    "id": "46a8e030-00ec-4ba5-85e6-b452b02cec75",
+    "name": "qwen-max",
+    "api_url": "http://154.219.119.91:8000/v1/chat/completions",
+    "api_key": "nwOBhtkgQfbezzp_8Gn1gsBy1ogROHqapzX0CcdoyjJE$IfnQggPVqp1sFS_fmF7Fnc4E0vD_Hu90",
+    "description": "",
+    "created_at": "2025-12-06 03:12:45"
+  }
+]

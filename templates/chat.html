@@ -1,0 +1,265 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="page-title">
+        <h1>聊天咨询</h1>
+        <p>与AI六爻大师进行对话交流</p>
+    </div>
+
+    <div class="chat-container">
+        <!-- 聊天设置 -->
+        <div class="chat-settings card">
+            <h3 class="card-title">
+                <i class="fas fa-cog"></i>
+                聊天设置
+            </h3>
+            <div class="setting-item">
+                <label for="chatModel" class="setting-label">
+                    <i class="fas fa-brain"></i>
+                    AI模型
+                </label>
+                <select id="chatModel" class="setting-select">
+                    {% for model in models %}
+                        <option value="{{ model }}">{{ model }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="setting-actions">
+                <button class="btn btn-secondary" onclick="clearChat()">
+                    <i class="fas fa-trash"></i>
+                    清空聊天
+                </button>
+                <button class="btn btn-secondary" onclick="scrollToBottom()">
+                    <i class="fas fa-arrow-down"></i>
+                    滚动到底部
+                </button>
+            </div>
+        </div>
+
+        <!-- 聊天区域 -->
+        <div class="chat-main">
+            <!-- 聊天消息列表 -->
+            <div class="chat-messages" id="chatMessages">
+                <!-- 欢迎消息 -->
+                <div class="message message-ai">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-header">
+                            <span class="message-author">AI六爻大师</span>
+                            <span class="message-time">{{ current_time }}</span>
+                        </div>
+                        <div class="message-text">
+                            <p>您好！我是AI六爻大师，很高兴为您提供六爻占卜相关的咨询服务。</p>
+                            <p>您可以问我关于六爻占卜的任何问题，例如：</p>
+                            <ul>
+                                <li>六爻占卜的基本原理</li>
+                                <li>如何确定用神</li>
+                                <li>卦象分析方法</li>
+                                <li>解卦技巧</li>
+                            </ul>
+                            <p>请随时开始提问！</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 消息输入区域 -->
+            <div class="chat-input-area">
+                <div class="input-wrapper">
+                    <textarea 
+                        id="messageInput" 
+                        class="message-input" 
+                        rows="1" 
+                        placeholder="请输入您的问题..."
+                        onkeydown="handleKeyDown(event)"
+                    ></textarea>
+                </div>
+                <div class="input-actions">
+                    <button class="btn btn-primary send-btn" onclick="sendMessage()">
+                        <i class="fas fa-paper-plane"></i>
+                        发送
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        // 聊天消息数组
+        let messages = [];
+        
+        // 当前时间
+        const current_time = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+        
+        // 发送消息
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const messageText = input.value.trim();
+            
+            if (!messageText) return;
+            
+            const model = document.getElementById('chatModel').value;
+            
+            // 添加用户消息到聊天记录
+            addMessage('user', messageText);
+            input.value = '';
+            input.style.height = 'auto'; // 重置输入框高度
+            
+            // 滚动到底部
+            scrollToBottom();
+            
+            // 添加AI正在输入的消息
+            const aiTypingMessage = addMessage('ai-typing', '');
+            
+            try {
+                // 调用API发送消息
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        messages: [
+                            ...messages,
+                            { role: 'user', content: messageText }
+                        ],
+                        model: model
+                    })
+                });
+                
+                const result = await response.json();
+                
+                // 移除正在输入的消息
+                aiTypingMessage.remove();
+                
+                if (result.success) {
+                    // 添加AI回复
+                    addMessage('ai', result.response);
+                } else {
+                    addMessage('ai', `抱歉，出现错误：${result.error}`);
+                }
+            } catch (error) {
+                // 移除正在输入的消息
+                aiTypingMessage.remove();
+                addMessage('ai', `抱歉，网络错误：${error.message}`);
+            } finally {
+                // 滚动到底部
+                scrollToBottom();
+            }
+        }
+        
+        // 添加消息到聊天记录
+        function addMessage(type, text) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            
+            let messageHTML = '';
+            const time = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+            
+            if (type === 'user') {
+                messageDiv.className = 'message message-user';
+                messageHTML = `
+                    <div class="message-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-header">
+                            <span class="message-author">我</span>
+                            <span class="message-time">${time}</span>
+                        </div>
+                        <div class="message-text">${text}</div>
+                    </div>
+                `;
+                
+                // 保存消息到数组
+                messages.push({ role: 'user', content: text });
+            } else if (type === 'ai') {
+                messageDiv.className = 'message message-ai';
+                messageHTML = `
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-header">
+                            <span class="message-author">AI六爻大师</span>
+                            <span class="message-time">${time}</span>
+                        </div>
+                        <div class="message-text">${text}</div>
+                    </div>
+                `;
+                
+                // 保存消息到数组
+                messages.push({ role: 'assistant', content: text });
+            } else if (type === 'ai-typing') {
+                messageDiv.className = 'message message-ai message-typing';
+                messageHTML = `
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-header">
+                            <span class="message-author">AI六爻大师</span>
+                            <span class="message-time">${time}</span>
+                        </div>
+                        <div class="message-typing-indicator">
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            messageDiv.innerHTML = messageHTML;
+            chatMessages.appendChild(messageDiv);
+            
+            return messageDiv;
+        }
+        
+        // 处理回车键发送消息
+        function handleKeyDown(event) {
+            // Ctrl+Enter 或 Shift+Enter 换行
+            if ((event.ctrlKey || event.shiftKey) && event.key === 'Enter') {
+                return; // 允许换行
+            }
+            // Enter 键发送消息
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+        
+        // 自动调整输入框高度
+        document.addEventListener('DOMContentLoaded', function() {
+            const input = document.getElementById('messageInput');
+            input.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+            });
+        });
+        
+        // 滚动到底部
+        function scrollToBottom() {
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // 清空聊天
+        function clearChat() {
+            if (confirm('确定要清空聊天记录吗？')) {
+                const chatMessages = document.getElementById('chatMessages');
+                chatMessages.innerHTML = '';
+                messages = [];
+                
+                // 添加欢迎消息
+                addMessage('ai', `您好！我是AI六爻大师，很高兴为您提供六爻占卜相关的咨询服务。\n\n您可以问我关于六爻占卜的任何问题，例如：\n• 六爻占卜的基本原理\n• 如何确定用神\n• 卦象分析方法\n• 解卦技巧\n\n请随时开始提问！`);
+                
+                scrollToBottom();
+            }
+        }
+    </script>
+{% endblock %}

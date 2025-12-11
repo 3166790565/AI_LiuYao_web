@@ -1,0 +1,1214 @@
+/* 全局样式重置 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 基础样式 */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--text-primary);
+    background-color: var(--bg-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* 容器样式 */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* 导航栏样式 */
+.navbar {
+    background-color: var(--bg-secondary);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    transition: background-color 0.3s ease;
+}
+
+.navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.navbar-brand i {
+    font-size: 1.8rem;
+}
+
+.navbar-menu {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.navbar-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.navbar-item:hover {
+    background-color: var(--bg-tertiary);
+    color: var(--primary-color);
+}
+
+.navbar-item.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.theme-toggle {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+    background-color: var(--bg-tertiary);
+    color: var(--primary-color);
+}
+
+/* 主内容区 */
+main {
+    padding: 2rem 0;
+    min-height: calc(100vh - 150px);
+}
+
+/* 页脚样式 */
+.footer {
+    background-color: var(--bg-secondary);
+    padding: 1.5rem 0;
+    text-align: center;
+    color: var(--text-secondary);
+    margin-top: 2rem;
+    transition: background-color 0.3s ease;
+}
+
+/* 标题样式 */
+.page-title {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.page-title h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.page-title p {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+}
+
+.section-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.record-count {
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--text-secondary);
+}
+
+/* 卡片样式 */
+.card {
+    background-color: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.card-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* 表单样式 */
+.analysis-form-container {
+    margin-bottom: 2rem;
+}
+
+.analysis-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-label {
+    font-weight: 600;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 100px;
+    line-height: 1.5;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+/* 按钮样式 */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    justify-content: center;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+.btn-secondary {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+    background-color: var(--bg-quaternary);
+    border-color: var(--primary-color);
+}
+
+.btn-danger {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: var(--danger-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+}
+
+/* 加载状态 */
+.loading {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-secondary);
+}
+
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border-color);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* 提示信息 */
+.tips-section {
+    margin-top: 2rem;
+}
+
+.tips-content ul {
+    list-style: disc;
+    padding-left: 1.5rem;
+    color: var(--text-secondary);
+}
+
+.tips-content li {
+    margin-bottom: 0.5rem;
+}
+
+/* 结果标签页 */
+.result-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+}
+
+.tab-btn {
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    padding: 0.75rem 1.25rem;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+    font-size: 0.95rem;
+}
+
+.tab-btn:hover {
+    background-color: var(--bg-quaternary);
+    border-color: var(--primary-color);
+}
+
+.tab-btn.active {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* 用神判断结果 */
+.yongshen-result {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.yongshen-main {
+    background-color: var(--bg-primary);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid var(--primary-color);
+}
+
+.yongshen-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.yongshen-label {
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.yongshen-value {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.yongshen-description h4 {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+/* 卦理分析 */
+.guli-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.guli-item {
+    background-color: var(--bg-primary);
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.guli-item.full-width {
+    grid-column: 1 / -1;
+}
+
+.guli-item h4,
+.guli-item h5 {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.guli-item p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* 评估徽章 */
+.assessment-badge {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.assessment-badge.strong {
+    background-color: rgba(46, 204, 113, 0.1);
+    color: #27ae60;
+}
+
+.assessment-badge.weak {
+    background-color: rgba(231, 76, 60, 0.1);
+    color: #e74c3c;
+}
+
+/* 无动爻提示 */
+.no-dongyao {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-secondary);
+    background-color: var(--bg-primary);
+    border-radius: 8px;
+    border: 1px dashed var(--border-color);
+}
+
+.no-dongyao i {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+}
+
+/* 数字量化分析 */
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--bg-primary);
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.info-label {
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.info-value {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+/* 卦象信息 */
+.hexagram-info {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.hexagram-info-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.hexagram-info-content {
+    background-color: var(--bg-primary);
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    color: var(--text-primary);
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.hexagram-info-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.hexagram-info-content::-webkit-scrollbar-track {
+    background: var(--bg-tertiary);
+    border-radius: 3px;
+}
+
+.hexagram-info-content::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 3px;
+}
+
+.hexagram-info-content::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-color);
+}
+
+/* 强弱指数 */
+.strength-section {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.strength-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+}
+
+.strength-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    background-color: var(--bg-primary);
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.strength-item.full-width {
+    grid-column: 1 / -1;
+}
+
+.strength-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.strength-value {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.strength-value.total {
+    font-size: 1.5rem;
+}
+
+.strength-value.positive {
+    color: #27ae60;
+}
+
+.strength-value.negative {
+    color: #e74c3c;
+}
+
+/* 动爻指数列表 */
+.dongyao-strength-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.dongyao-strength-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background-color: var(--bg-primary);
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.dongyao-dizhi {
+    font-weight: 600;
+    color: var(--primary-color);
+    width: 40px;
+}
+
+.strength-details {
+    display: flex;
+    gap: 1rem;
+    flex: 1;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.strength-details .total {
+    font-weight: 600;
+    margin-left: auto;
+}
+
+/* 综合解读 */
+.jiedu-content {
+    background-color: var(--bg-primary);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid var(--primary-color);
+    line-height: 1.8;
+    color: var(--text-primary);
+}
+
+/* 结果操作按钮 */
+.result-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* 历史记录 */
+.search-bar {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.search-input {
+    flex: 1;
+    min-width: 200px;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.search-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.25rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.search-btn:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+.clear-btn {
+    background-color: var(--bg-tertiary);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+    padding: 0.75rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.clear-btn:hover {
+    background-color: var(--bg-quaternary);
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* 历史记录列表 */
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.history-item {
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.history-item:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.1);
+}
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.history-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.history-time {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.history-model {
+    font-size: 0.85rem;
+    background-color: var(--bg-tertiary);
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    color: var(--primary-color);
+    font-weight: 600;
+    display: inline-block;
+}
+
+.history-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    padding: 0.5rem;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--text-secondary);
+}
+
+.view-btn:hover {
+    background-color: rgba(52, 152, 219, 0.1);
+    color: var(--primary-color);
+}
+
+.delete-btn:hover {
+    background-color: rgba(231, 76, 60, 0.1);
+    color: var(--danger-color);
+}
+
+.history-content {
+    margin-bottom: 0.75rem;
+}
+
+.history-question {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+}
+
+.history-yongshen {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+}
+
+.history-yongshen .value {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.history-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.yongshen-strength {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.yongshen-strength .value {
+    font-weight: 600;
+}
+
+/* 批量操作 */
+.batch-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* 无记录提示 */
+.no-records {
+    text-align: center;
+    padding: 3rem;
+    color: var(--text-secondary);
+    background-color: var(--bg-primary);
+    border: 2px dashed var(--border-color);
+    border-radius: 12px;
+}
+
+.no-records i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: var(--border-color);
+}
+
+.no-records p {
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+}
+
+/* 聊天界面 */
+.chat-container {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.chat-settings {
+    position: sticky;
+    top: 100px;
+    height: fit-content;
+}
+
+.setting-item {
+    margin-bottom: 1.5rem;
+}
+
+.setting-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.setting-select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.setting-select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.setting-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.chat-main {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 250px);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: var(--bg-secondary);
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 1.5rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.message {
+    display: flex;
+    gap: 1rem;
+    max-width: 80%;
+}
+
+.message-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.message-user .message-avatar {
+    background-color: var(--primary-color);
+    color: white;
+    align-self: flex-end;
+}
+
+.message-ai .message-avatar {
+    background-color: var(--bg-tertiary);
+    color: var(--primary-color);
+}
+
+.message-content {
+    flex: 1;
+    background-color: var(--bg-tertiary);
+    padding: 1rem;
+    border-radius: 12px;
+    position: relative;
+}
+
+.message-user {
+    flex-direction: row-reverse;
+    align-self: flex-end;
+}
+
+.message-user .message-content {
+    background-color: var(--primary-color);
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+
+.message-ai .message-content {
+    border-bottom-left-radius: 4px;
+}
+
+.message-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.message-user .message-header {
+    flex-direction: row-reverse;
+}
+
+.message-author {
+    font-weight: 600;
+}
+
+.message-time {
+    opacity: 0.7;
+    font-size: 0.8rem;
+}
+
+.message-text {
+    line-height: 1.6;
+}
+
+.message-text p {
+    margin-bottom: 0.5rem;
+}
+
+.message-text ul {
+    list-style: disc;
+    padding-left: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.message-text li {
+    margin-bottom: 0.25rem;
+}
+
+/* 消息输入区域 */
+.chat-input-area {
+    display: flex;
+    gap: 1rem;
+    padding: 1.5rem;
+    border-top: 1px solid var(--border-color);
+    background-color: var(--bg-secondary);
+}
+
+.input-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.message-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    resize: none;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    min-height: 45px;
+    max-height: 120px;
+}
+
+.message-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.input-actions {
+    display: flex;
+    align-items: flex-end;
+}
+
+.send-btn {
+    height: 45px;
+    aspect-ratio: 1;
+    padding: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 正在输入状态 */
+.message-typing {
+    align-self: flex-start;
+}
+
+.message-typing-indicator {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    padding: 0.5rem 0;
+}
+
+.typing-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    animation: typing 1.4s infinite;
+}
+
+.typing-dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes typing {
+    0%, 60%, 100% { opacity: 0.5; transform: translateY(0); }
+    30% { opacity: 1; transform: translateY(-5px); }
+}
+
+/* 聊天消息滚动条样式 */
+.chat-messages::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-messages::-webkit-scrollbar-track {
+    background: var(--bg-tertiary);
+    border-radius: 3px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 3px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-color);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .navbar-menu {
+        gap: 0.25rem;
+    }
+    
+    .navbar-item span {
+        display: none;
+    }
+    
+    .page-title h1 {
+        font-size: 2rem;
+    }
+    
+    .result-tabs {
+        flex-wrap: wrap;
+    }
+    
+    .tab-btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .guli-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .search-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .search-input {
+        min-width: auto;
+    }
+    
+    .chat-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .chat-settings {
+        position: static;
+    }
+    
+    .chat-main {
+        height: calc(100vh - 400px);
+    }
+    
+    .message {
+        max-width: 95%;
+    }
+    
+    .history-actions {
+        gap: 0.25rem;
+    }
+    
+    .action-btn {
+        padding: 0.4rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 15px;
+    }
+    
+    .page-title h1 {
+        font-size: 1.5rem;
+    }
+    
+    .card {
+        padding: 1rem;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .btn {
+        width: 100%;
+    }
+    
+    .result-actions,
+    .batch-actions {
+        flex-direction: column;
+    }
+    
+    .result-actions .btn,
+    .batch-actions .btn {
+        width: 100%;
+    }
+    
+    .chat-messages {
+        padding: 1rem;
+    }
+    
+    .chat-input-area {
+        padding: 1rem;
+    }
+}

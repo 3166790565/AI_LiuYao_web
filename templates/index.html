@@ -1,0 +1,195 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="page-title">
+        <h1>AI六爻解卦</h1>
+        <p>基于AI技术的传统易学分析工具</p>
+    </div>
+
+    <div class="analysis-form-container">
+        <div class="card">
+            <h2 class="card-title">解卦信息</h2>
+            <form id="analysisForm" class="analysis-form">
+                <!-- 问题输入 -->
+                <div class="form-group">
+                    <label for="question" class="form-label">
+                        <i class="fas fa-question-circle"></i>
+                        请输入您的问题
+                    </label>
+                    <textarea 
+                        id="question" 
+                        name="question" 
+                        class="form-textarea" 
+                        rows="3" 
+                        placeholder="例如：我最近想换工作，不知道是否顺利？"
+                        required
+                    ></textarea>
+                </div>
+
+                <!-- 卦象信息输入 -->
+                <div class="form-group">
+                    <label for="hexagram_info" class="form-label">
+                        <i class="fas fa-dice-d20"></i>
+                        请输入卦象信息
+                    </label>
+                    <textarea 
+                        id="hexagram_info" 
+                        name="hexagram_info" 
+                        class="form-textarea" 
+                        rows="15" 
+                        placeholder="请粘贴完整的卦象信息，包括主卦、变卦、动爻、世应、六亲、六神、月建、日辰等。例如：
+起卦时间（公历）：2025-12-6 0:12
+起卦时间（农历）：2025-10-17 0:12
+当前四柱：乙巳  丁亥  己酉  甲子  
+起卦四柱：乙巳  丁亥  己酉  甲子  
+旬空：戌亥
+归妹卦变兑卦 
+变爻：5爻动
+------------本卦------------
+初爻：官鬼丁巳火 少阳 ---     死  伏神=官鬼巳  螣蛇 
+二爻：妻财丁卯木 少阳 ---     相  伏神=妻财卯  白虎 灾煞 
+三爻：父母丁丑土 少阴 - -  世 囚  伏神=父母丑  玄武 华盖 
+四爻：官鬼庚午火 少阳 ---     死  伏神=子孙亥  青龙 桃花 日禄 
+五爻：兄弟庚申金 老阴 - -X    休  伏神=兄弟酉  朱雀 贵人 
+末爻：父母庚戌土 少阴 - -  应 囚  伏神=父母未  勾陈 
+5爻是动爻
+本卦应爻位置：6爻
+本卦世爻位置：3爻
+------------变卦------------
+初爻：官鬼丁巳火 少阳 ---     死  伏神=官鬼巳 
+二爻：妻财丁卯木 少阳 ---     相  伏神=妻财卯 灾煞 
+三爻：父母丁丑土 少阴 - -  世 囚  伏神=父母丑 华盖 
+四爻：子孙丁亥水 少阳 ---     旺  伏神=子孙亥 驿马 
+五爻：兄弟丁酉金 少阳 ---     休  伏神=兄弟酉 将星 
+末爻：父母丁未土 少阴 - -  应 囚  伏神=父母未 羊刃 
+变卦应爻位置：3爻
+变卦世爻位置：6爻
+------------其他------------
+互卦：既济卦
+错卦：渐卦
+综卦：渐卦
+------------梅花------------
+本卦：归妹卦
+互卦：既济卦
+变卦：兑卦
+错卦：渐卦
+综卦：渐卦"
+                        required
+                    ></textarea>
+                </div>
+
+                <!-- 模型选择 -->
+                <div class="form-group">
+                    <label for="model" class="form-label">
+                        <i class="fas fa-brain"></i>
+                        选择AI模型
+                    </label>
+                    <select id="model" name="model" class="form-select" required>
+                        {% for model in models %}
+                            <option value="{{ model }}">{{ model }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- 用户指定用神 -->
+                <div class="form-group">
+                    <label for="user_yongshen" class="form-label">
+                        <i class="fas fa-crosshairs"></i>
+                        用户指定用神（可选）
+                    </label>
+                    <input 
+                        type="text" 
+                        id="user_yongshen" 
+                        name="user_yongshen" 
+                        class="form-input" 
+                        placeholder="例如：二爻妻财、初爻官鬼、三爻父母（留空则AI自行判断）"
+                    >
+                    <small class="form-help">若您对用神判断有明确意见，可在此指定；留空则由AI自动判断</small>
+                </div>
+
+                <!-- 提交按钮 -->
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary" id="analyzeBtn">
+                        <i class="fas fa-magic"></i>
+                        <span>开始分析</span>
+                    </button>
+                    <div class="loading" id="loading" style="display: none;">
+                        <div class="spinner"></div>
+                        <span>正在分析中，请稍候...</span>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 提示信息 -->
+    <div class="tips-section">
+        <div class="card">
+            <h3 class="card-title">
+                <i class="fas fa-lightbulb"></i>
+                使用提示
+            </h3>
+            <div class="tips-content">
+                <ul>
+                    <li>请确保问题描述清晰、具体，以便AI更准确地判断用神</li>
+                    <li>卦象信息要完整，包括主卦、变卦、动爻、世应、六亲、六神、月建、日辰等</li>
+                    <li>支持多种AI模型，可根据需要选择</li>
+                    <li>分析结果将保存在历史记录中，便于后续查看</li>
+                    <li>分析过程可能需要30秒至1分钟，请耐心等待</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/api.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('analysisForm');
+            const analyzeBtn = document.getElementById('analyzeBtn');
+            const loading = document.getElementById('loading');
+            
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                // 表单验证
+                if (!form.checkValidity()) {
+                    form.reportValidity();
+                    return;
+                }
+                
+                // 获取表单数据
+                const formData = {
+                    question: document.getElementById('question').value.trim(),
+                    hexagram_info: document.getElementById('hexagram_info').value.trim(),
+                    model: document.getElementById('model').value,
+                    user_yongshen: document.getElementById('user_yongshen').value.trim()
+                };
+                
+                // 显示加载状态
+                analyzeBtn.style.display = 'none';
+                loading.style.display = 'flex';
+                
+                try {
+                    // 调用API进行分析
+                    const response = await api.analyze(formData);
+                    
+                    if (response.success) {
+                        // 跳转到结果页面
+                        window.location.href = `/result/${response.record_id}`;
+                    } else {
+                        alert(`分析失败：${response.error}`);
+                    }
+                } catch (error) {
+                    console.error('分析出错:', error);
+                    alert(`分析过程中出现错误：${error.message}`);
+                } finally {
+                    // 恢复按钮状态
+                    analyzeBtn.style.display = 'flex';
+                    loading.style.display = 'none';
+                }
+            });
+        });
+    </script>
+{% endblock %}

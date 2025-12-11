@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="auth-container">
+        <div class="auth-card">
+            <h1 class="auth-title">登录</h1>
+            
+            {% if error %}
+                <div class="auth-error">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span>{{ error }}</span>
+                </div>
+            {% endif %}
+            
+            <form method="POST" class="auth-form">
+                <!-- 用户名 -->
+                <div class="form-group">
+                    <label for="username" class="form-label">
+                        <i class="fas fa-user"></i>
+                        用户名
+                    </label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        name="username" 
+                        class="form-input" 
+                        placeholder="请输入用户名"
+                        required
+                        autofocus
+                    >
+                </div>
+                
+                <!-- 密码 -->
+                <div class="form-group">
+                    <label for="password" class="form-label">
+                        <i class="fas fa-lock"></i>
+                        密码
+                    </label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        class="form-input" 
+                        placeholder="请输入密码"
+                        required
+                    >
+                </div>
+                
+                <!-- 图形验证码 -->
+                <div class="form-group captcha-group">
+                    <label for="captcha" class="form-label">
+                        <i class="fas fa-shield-alt"></i>
+                        验证码
+                    </label>
+                    <div class="captcha-row">
+                        <input 
+                            type="text" 
+                            id="captcha" 
+                            name="captcha" 
+                            class="form-input captcha-input" 
+                            placeholder="请输入验证码"
+                            required
+                            maxlength="4"
+                        >
+                        <img 
+                            src="{{ url_for('auth.get_captcha') }}" 
+                            alt="验证码" 
+                            class="captcha-image"
+                            onclick="this.src='{{ url_for('auth.get_captcha') }}?' + Math.random()"
+                            title="点击刷新验证码"
+                        >
+                    </div>
+                </div>
+                
+                <!-- 提交按钮 -->
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <i class="fas fa-sign-in-alt"></i>
+                        登录
+                    </button>
+                </div>
+            </form>
+            
+            <!-- 注册链接 -->
+            <div class="auth-footer">
+                <p>还没有账号？ <a href="{{ url_for('auth.register') }}">立即注册</a></p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <style>
+        /* 登录注册页面样式 */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 200px);
+            padding: 2rem 0;
+        }
+        
+        .auth-card {
+            background-color: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .auth-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .auth-error {
+            background-color: rgba(231, 76, 60, 0.1);
+            color: #e74c3c;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .captcha-group {
+            margin-bottom: 0.5rem;
+        }
+        
+        .captcha-row {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .captcha-input {
+            flex: 1;
+        }
+        
+        .captcha-image {
+            width: 120px;
+            height: 40px;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+        
+        .btn-block {
+            width: 100%;
+        }
+        
+        .auth-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--text-secondary);
+        }
+        
+        .auth-footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+{% endblock %}

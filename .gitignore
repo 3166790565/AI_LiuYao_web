@@ -1,0 +1,46 @@
+# 虚拟环境
+.venv/
+env/
+
+# 数据库文件
+*.db
+app.db
+
+# 日志文件
+*.log
+logs/
+
+# 敏感文件
+api.py
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE配置
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+
+# 构建文件
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# 测试文件
+.pytest_cache/
+.coverage
+htmlcov/
+
+# 其他
+*.bak
+*.tmp
+*.temp
